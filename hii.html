@@ -373,10 +373,10 @@
             margin: 0 auto;
         }
 
-        /* Hide main content initially */
+        /* Show main content by default */
         .main-content {
-            display: none;
-            opacity: 0;
+            display: block;
+            opacity: 1;
             transition: opacity 0.8s ease;
         }
 
@@ -1628,49 +1628,7 @@
 </head>
 
 <body>
-    <!-- Password Protection Overlay -->
-    <div class="password-overlay" id="passwordOverlay">
-        <div class="password-particles" id="particlesContainer"></div>
-        <div class="password-container" id="passwordContainer">
-            <div class="lock-icon">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h1>Secure Portfolio Access</h1>
-            <p>Welcome to Jaya Krishna's portfolio. Please enter the password to view my work and accomplishments.</p>
-
-            <div class="password-input-group">
-                <input type="password" class="password-input" id="passwordInput" placeholder="Enter password"
-                    autocomplete="off" autofocus>
-                <button type="button" class="password-toggle" id="passwordToggle">
-                    <i class="fas fa-eye"></i>
-                </button>
-            </div>
-
-            <div class="password-error" id="passwordError">
-                Incorrect password. Please try again.
-            </div>
-
-            <button class="password-submit" id="passwordSubmit">
-                Access Portfolio
-            </button>
-
-            <p class="password-hint">Hint:9**8</p>
-        </div>
-    </div>
-
-    <!-- Access Granted Animation -->
-    <div class="access-granted" id="accessGranted">
-        <div class="granted-content">
-            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-            </svg>
-            <h1>Access Granted</h1>
-            <p>Welcome to my portfolio! Enjoy exploring my work and skills.</p>
-        </div>
-    </div>
-
-    <!-- Main Content (Hidden initially) -->
+    <!-- Main Content -->
     <div class="main-content" id="mainContent">
         <!-- EmailJS status badge (for debugging) -->
         <div id="emailjs-status" aria-hidden="true" style="display:none;">Initializing EmailJS...</div>
@@ -1937,8 +1895,22 @@
                                 <span>Completed: 2025</span>
                             </div>
                             <a href="169-SWAYAM.pdf" class="certificate-link" target="_blank" rel="noopener noreferrer"
-                                id="nptelCertLink" download="169-SWAYAM.pdf">
-                                <span>View / Download Certificate</span>
+                                id="nptelCertLink">
+                                <span>View Certificate</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="certificate-card">
+                        <div class="certificate-info">
+                            <h3>Completion of HTML Training</h3>
+                            <p>Certificate of completion for HTML training.</p>
+                            <div class="certificate-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <span>Completed: 2025</span>
+                            </div>
+                            <a href="basic1.pdf" class="certificate-link" target="_blank" rel="noopener noreferrer">
+                                <span>View Certificate</span>
                                 <i class="fas fa-external-link-alt"></i>
                             </a>
                         </div>
@@ -2126,126 +2098,11 @@
     </div>
 
     <script>
-        // Password Protection System
-        const PASSWORD = "9298"; // The password is 9298
-        const passwordOverlay = document.getElementById('passwordOverlay');
-        const passwordContainer = document.getElementById('passwordContainer');
-        const passwordInput = document.getElementById('passwordInput');
-        const passwordToggle = document.getElementById('passwordToggle');
-        const passwordSubmit = document.getElementById('passwordSubmit');
-        const passwordError = document.getElementById('passwordError');
-        const accessGranted = document.getElementById('accessGranted');
-        const mainContent = document.getElementById('mainContent');
-        const particlesContainer = document.getElementById('particlesContainer');
-
-        // Create floating particles
-        function createParticles() {
-            const particleCount = 30;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-
-                // Random position
-                const left = Math.random() * 100;
-                const size = Math.random() * 4 + 2;
-                const animationDuration = Math.random() * 20 + 15;
-                const animationDelay = Math.random() * 5;
-
-                particle.style.left = `${left}%`;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.animationDuration = `${animationDuration}s`;
-                particle.style.animationDelay = `${animationDelay}s`;
-
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Toggle password visibility
-        passwordToggle.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-        });
-
-        // Handle password submission
-        passwordSubmit.addEventListener('click', checkPassword);
-        passwordInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
-        function checkPassword() {
-            const enteredPassword = passwordInput.value.trim();
-
-            if (enteredPassword === PASSWORD) {
-                // Correct password
-                passwordError.classList.remove('show');
-                passwordInput.classList.remove('error');
-
-                // Show access granted animation
-                accessGranted.classList.add('active');
-
-                // After animation, hide password overlay and show main content
-                setTimeout(() => {
-                    passwordOverlay.classList.add('hidden');
-                    setTimeout(() => {
-                        mainContent.classList.add('visible');
-                        // Initialize the main content
-                        initializePortfolio();
-                        // Remove access granted animation
-                        setTimeout(() => {
-                            accessGranted.classList.remove('active');
-                        }, 1000);
-                    }, 800);
-                }, 1500);
-
-            } else {
-                // Incorrect password
-                passwordError.classList.add('show');
-                passwordInput.classList.add('error');
-                passwordInput.value = '';
-
-                // Shake animation for wrong password
-                passwordContainer.style.animation = 'none';
-                setTimeout(() => {
-                    passwordContainer.style.animation = 'shake 0.5s ease';
-                }, 10);
-
-                // Remove shake animation after it completes
-                setTimeout(() => {
-                    passwordContainer.style.animation = '';
-                }, 500);
-            }
-        }
-
-        // Add CSS for shake animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0) translateY(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) translateY(0); }
-                20%, 40%, 60%, 80% { transform: translateX(10px) translateY(0); }
-            }
-            
-            .password-input.error {
-                border-color: #ff6584 !important;
-                background: rgba(255, 101, 132, 0.1) !important;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Initialize password protection
+        // Initialize Portfolio
         document.addEventListener('DOMContentLoaded', function () {
-            createParticles();
-            setTimeout(() => {
-                passwordContainer.classList.add('animate-in');
-            }, 300);
+            initializePortfolio();
         });
 
-        // Initialize Portfolio (copied from original code)
         function initializePortfolio() {
             // DOM Elements
             const header = document.getElementById('header');
