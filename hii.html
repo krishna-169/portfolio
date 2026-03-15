@@ -1402,6 +1402,170 @@
             display: none;
         }
 
+        /* Portfolio Chatbot */
+        .chatbot-launcher {
+            position: fixed;
+            right: 20px;
+            bottom: 70px;
+            width: 58px;
+            height: 58px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 1200;
+            box-shadow: 0 12px 25px rgba(108, 99, 255, 0.35);
+            transition: var(--transition);
+        }
+
+        .chatbot-launcher:hover {
+            transform: translateY(-3px) scale(1.03);
+        }
+
+        .chatbot-panel {
+            position: fixed;
+            right: 20px;
+            bottom: 140px;
+            width: min(360px, calc(100vw - 24px));
+            max-height: 520px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.16);
+            border: 1px solid #ececf4;
+            overflow: hidden;
+            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(16px) scale(0.98);
+            transform-origin: bottom right;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+        }
+
+        .chatbot-panel.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: #fff;
+        }
+
+        .chatbot-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .chatbot-close {
+            background: transparent;
+            color: #fff;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            max-height: 260px;
+            overflow-y: auto;
+            padding: 12px;
+            background: #f8f8fd;
+        }
+
+        .chatbot-msg {
+            max-width: 90%;
+            margin-bottom: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            line-height: 1.4;
+            white-space: pre-line;
+        }
+
+        .chatbot-msg.user {
+            margin-left: auto;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chatbot-msg.bot {
+            background: #fff;
+            color: var(--text-color);
+            border: 1px solid #ececf4;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chatbot-quick {
+            padding: 10px 12px;
+            border-top: 1px solid #ececf4;
+            border-bottom: 1px solid #ececf4;
+            background: #fff;
+        }
+
+        .chatbot-quick p {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .chatbot-quick-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chatbot-chip {
+            border: 1px solid #d8d8ea;
+            background: #fff;
+            color: var(--primary-color);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-chip:hover {
+            background: #f0f0ff;
+        }
+
+        .chatbot-input-wrap {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: #fff;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            border: 1px solid #d9d9eb;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .chatbot-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+        }
+
+        .chatbot-send {
+            border: none;
+            border-radius: 10px;
+            background: var(--primary-color);
+            color: #fff;
+            width: 42px;
+            cursor: pointer;
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
             .hero h1 {
@@ -1622,6 +1786,17 @@
 
             .granted-content h1 {
                 font-size: 2.5rem;
+            }
+
+            .chatbot-launcher {
+                right: 12px;
+                bottom: 64px;
+            }
+
+            .chatbot-panel {
+                right: 12px;
+                bottom: 130px;
+                width: calc(100vw - 24px);
             }
         }
     </style>
@@ -2077,6 +2252,31 @@
             </div>
         </section>
 
+        <button class="chatbot-launcher" id="chatbotLauncher" aria-label="Open portfolio chatbot">
+            <i class="fas fa-comments"></i>
+        </button>
+
+        <div class="chatbot-panel" id="chatbotPanel" aria-live="polite">
+            <div class="chatbot-header">
+                <span class="chatbot-title">Chat</span>
+                <button class="chatbot-close" id="chatbotClose" aria-label="Close chatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages"></div>
+            <div class="chatbot-quick">
+                <p>Quick questions</p>
+                <div class="chatbot-quick-list" id="chatbotQuickList"></div>
+            </div>
+            <div class="chatbot-input-wrap">
+                <input class="chatbot-input" id="chatbotInput" type="text"
+                    placeholder="Ask about skills, projects, education..." />
+                <button class="chatbot-send" id="chatbotSend" aria-label="Send message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -2122,6 +2322,8 @@
             const btnText = document.getElementById('btnText');
             const btnLoading = document.getElementById('btnLoading');
             const formMessage = document.getElementById('formMessage');
+
+            initPortfolioChatbot();
 
             // Dynamic stats updater: compute and refresh resume stats from page content
             function computeAndUpdateStats() {
@@ -2572,6 +2774,112 @@
                     // Update stats after adding fallback projects
                     computeAndUpdateStats();
                 }
+            }
+
+            function initPortfolioChatbot() {
+                const chatbotLauncher = document.getElementById('chatbotLauncher');
+                const chatbotPanel = document.getElementById('chatbotPanel');
+                const chatbotClose = document.getElementById('chatbotClose');
+                const chatbotMessages = document.getElementById('chatbotMessages');
+                const chatbotQuickList = document.getElementById('chatbotQuickList');
+                const chatbotInput = document.getElementById('chatbotInput');
+                const chatbotSend = document.getElementById('chatbotSend');
+
+                if (!chatbotLauncher || !chatbotPanel || !chatbotMessages || !chatbotInput || !chatbotSend || !chatbotQuickList) {
+                    return;
+                }
+
+                const predefinedAnswers = {
+                    'your name': "I'm Jaya Krishna.",
+                    'skills': 'My key skills include C, Java, Python, JavaScript, and Basic DBMS.',
+                    'education': 'I studied at Nandi School (2014-2023) and I am pursuing a Diploma in Computer Engineering (2023-2026).',
+                    'projects': 'My projects are loaded from GitHub in the Recent Projects section. You can view them directly there.',
+                    'certificates': 'I have certifications including AI Masterclass, Power BI webinar, NPTEL, HTML training, and GUVI certifications.',
+                    'resume': 'You can download my resume from the Resume section using the "Download Resume (PDF)" button.',
+                    'contact': 'You can contact me at saimanoj1246@gmail.com or +91 9885751835.',
+                    'location': 'I am based in Pedanandipadu, Andhra Pradesh, India.',
+                    'linkedin': 'My LinkedIn is linkedin.com/in/jaya-krishna.',
+                    'github': 'My GitHub is github.com/krishna-169.'
+                };
+
+                const quickQuestions = [
+                    'What are your skills?',
+                    'Show education details',
+                    'How can I contact you?',
+                    'Where is your resume?',
+                    'Tell me about certificates'
+                ];
+
+                function appendMessage(text, sender) {
+                    const message = document.createElement('div');
+                    message.className = `chatbot-msg ${sender}`;
+                    message.textContent = text;
+                    chatbotMessages.appendChild(message);
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                }
+
+                function normalize(text) {
+                    return text.toLowerCase().trim();
+                }
+
+                function getBotResponse(userText) {
+                    const input = normalize(userText);
+
+                    if (!input) return 'Please type a question about my portfolio.';
+
+                    for (const key in predefinedAnswers) {
+                        if (input.includes(key)) {
+                            return predefinedAnswers[key];
+                        }
+                    }
+
+                    return 'I can answer portfolio questions about skills, projects, education, certificates, resume, and contact details.';
+                }
+
+                function submitQuestion(questionText) {
+                    const text = questionText || chatbotInput.value;
+                    if (!text || !text.trim()) return;
+
+                    appendMessage(text.trim(), 'user');
+                    const response = getBotResponse(text);
+
+                    setTimeout(() => {
+                        appendMessage(response, 'bot');
+                    }, 250);
+
+                    chatbotInput.value = '';
+                }
+
+                quickQuestions.forEach((question) => {
+                    const chip = document.createElement('button');
+                    chip.className = 'chatbot-chip';
+                    chip.textContent = question;
+                    chip.addEventListener('click', () => submitQuestion(question));
+                    chatbotQuickList.appendChild(chip);
+                });
+
+                chatbotLauncher.addEventListener('click', () => {
+                    chatbotPanel.classList.toggle('open');
+                    if (chatbotPanel.classList.contains('open')) {
+                        chatbotInput.focus();
+                    }
+                });
+
+                if (chatbotClose) {
+                    chatbotClose.addEventListener('click', () => {
+                        chatbotPanel.classList.remove('open');
+                    });
+                }
+
+                chatbotSend.addEventListener('click', () => submitQuestion());
+                chatbotInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        submitQuestion();
+                    }
+                });
+
+                appendMessage('Hi! I am Chat. Ask me about skills, projects, education, certificates, resume, or contact details.', 'bot');
             }
         }
     </script>
